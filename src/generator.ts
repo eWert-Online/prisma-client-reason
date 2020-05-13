@@ -1,10 +1,12 @@
 import { join } from 'path';
 import { ensureDir, writeFile } from 'fs-extra';
 import { codeBlock } from 'common-tags';
-import { generatorHandler, DMMF } from '@prisma/generator-helper';
-import makeEnums from './makeEnums';
+import { generatorHandler } from '@prisma/generator-helper';
+
 import ExternalsGenerator from './Externals';
-import ModelsGenerator from './Models';
+
+import ModelGenerator from './Generators/Model';
+import EnumGenerator from './Generators/Enum';
 
 const clientVersion = require('../package.json').version;
 
@@ -26,19 +28,22 @@ generatorHandler({
       throw new Error();
     }
 
-    const models = new ModelsGenerator(options.dmmf.datamodel.models);
     const externals = new ExternalsGenerator(options.dmmf.datamodel.models);
 
     await ensureDir(options.generator.output);
     await writeFile(
       join(options.generator.output, `${options.generator.config.name}.re`),
-      codeBlock`
+      `
         type prismaClient;
 
         /* ENUMS */
-        ${makeEnums(options.dmmf.schema.enums)}
+        ${options.dmmf.schema.enums
+          .map((type) => new EnumGenerator(type).generate())
+          .join('\n\n')}
         
-        ${models.generate()}
+        module rec ${options.dmmf.datamodel.models
+          .map((model) => new ModelGenerator(model).generate())
+          .join('\n and \n')}
 
         ${externals.generate()}
 

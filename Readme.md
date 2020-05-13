@@ -16,7 +16,7 @@ If you want to help out, don't hesitate to file an issue or even a pull request.
 - [ ] Selecting subfields from action
 - [ ] Model actions
   - [ ] `Model.`findOne
-  - [ ] `Model.`findMany
+  - [x] `Model.`findMany
   - [x] `Model.`create
   - [ ] `Model.`update
   - [ ] `Model.`updateMany

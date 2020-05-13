@@ -30,36 +30,59 @@ class ExternalsGenerator {
   };
 
   private findOne = (model: DMMF.Model) => {
-    return {
-      rei: codeBlock`
-        
-      `,
-      re: codeBlock`
-        
-      `,
-    };
+    const hasRelations = model.fields.some((field) => field.kind === 'object');
+    return codeBlock`
+      module FindOne: {
+        type t = {
+          select: option(${model.name}.Select.t),
+          ${hasRelations ? `include_: option(${model.name}.Include.t),` : ''}
+          where: ${model.name}.WhereUniqueInput.t
+        };
+
+        [@bs.send] [@bs.scope "${model.name.toLowerCase()}"]
+        external make: (prismaClient, t) =>
+          Promise.t(${model.name}.t) = "findOne";
+      };
+    `;
   };
 
   private findMany = (model: DMMF.Model) => {
+    const hasRelations = model.fields.some((field) => field.kind === 'object');
     return codeBlock`
-      
+      module FindMany: {
+        type t = {
+          select: option(${model.name}.Select.t),
+          ${hasRelations ? `include_: option(${model.name}.Include.t),` : ''}
+          where: option(${model.name}.WhereInput.t),
+          orderBy: option(${model.name}OrderByInput.t),
+          skip: option(int),
+          after: option(${model.name}.WhereUniqueInput.t),
+          before: option(${model.name}.WhereUniqueInput.t),
+          first: option(int),
+          last: option(int),
+        };
+
+        [@bs.send] [@bs.scope "${model.name.toLowerCase()}"]
+        external make: (prismaClient, t) =>
+          Promise.t(array(${model.name}.t)) = "findMany";
+      };
     `;
   };
 
   private create = (model: DMMF.Model) => {
-    const hasRelations = model.fields.some(
-      (field) => field.kind === 'relation',
-    );
+    const hasRelations = model.fields.some((field) => field.kind === 'object');
     return codeBlock`
-      type t = {
-        select: option(${model.name}.Select.t),
-        ${hasRelations ? `include_: option(${model.name}.Include.t),` : ''}
-        data: ${model.name}.CreateInput.t
-      };
+      module Create: {
+        type t = {
+          select: option(${model.name}.Select.t),
+          ${hasRelations ? `include_: option(${model.name}.Include.t),` : ''}
+          data: ${model.name}.CreateInput.t
+        };
 
-      [@bs.send] [@bs.scope "${model.name.toLowerCase()}"]
-      external create: 
-        (prismaClient, t) => Promise.t(${model.name}.t) = "create";
+        [@bs.send] [@bs.scope "${model.name.toLowerCase()}"]
+        external make: (prismaClient, t) =>
+          Promise.t(${model.name}.t) = "create";
+      };
     `;
   };
 
@@ -109,6 +132,14 @@ class ExternalsGenerator {
             .map((model) => {
               return codeBlock`
                 module ${model.name}: {
+                  ${this.findOne(model)}
+                  ${this.findMany(model)}
+                  ${this.update(model)}
+                  ${this.updateMany(model)}
+                  ${this.upsert(model)}
+                  ${this.delete(model)}
+                  ${this.deleteMany(model)}
+                  ${this.count(model)}
                   ${this.create(model)}
                 }
               `;

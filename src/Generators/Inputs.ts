@@ -13,7 +13,7 @@ class InputsGenerator {
 
   constructor(model: DMMF.Model) {
     this.model = model;
-    this.hasRelations = model.fields.some((field) => field.kind === 'relation');
+    this.hasRelations = model.fields.some((field) => field.kind === 'object');
   }
 
   private FindOneArgs = () => {
