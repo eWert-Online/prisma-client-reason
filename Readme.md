@@ -68,20 +68,36 @@ prisma->PrismaClient.disconnect;
 #### PrismaClient.`Model`.create
 
 ```reason
-prisma->PrismaClient.User.create(
+open PrismaClient;
+
+prisma->User.create(
   ~select=
-    PrismaClient.User.Select.make(
+    User.Select.make(
       ~id=true,
       ~createdAt=true,
       ~username=true,
       (),
     ),
   ~data=
-    PrismaClient.User.CreateInput.make(
+    User.CreateInput.make(
       ~lastname="Ewert",
       ~username="ewert",
       (),
     ),
+  (),
+);
+```
+
+#### PrismaClient.`Model`.findMany
+
+```reason
+open PrismaClient;
+
+prisma->User.findMany(
+  ~where=User.WhereInput.make(
+    ~username="ewert",
+    (),
+  ),
   (),
 );
 ```
