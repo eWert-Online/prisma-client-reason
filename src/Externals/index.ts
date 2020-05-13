@@ -1,6 +1,5 @@
 import { DMMF } from '@prisma/generator-helper';
 import { codeBlock } from 'common-tags';
-import { toObjectType } from '../helpers';
 
 class ExternalsGenerator {
   private models: DMMF.Model[];
@@ -9,17 +8,24 @@ class ExternalsGenerator {
     this.models = models;
   }
 
+  private make = () => {
+    return codeBlock`
+      [@bs.module "@prisma/client"] [@bs.new]
+      external make: unit => prismaClient = "PrismaClient";
+    `;
+  };
+
   private connect = () => {
     return codeBlock`
       [@bs.send]
-      external connect: (prismaClient) => Js.Promise.t(unit) = "connect";
+      external connect: (prismaClient) => Promise.t(unit) = "connect";
     `;
   };
 
   private disconnect = () => {
     return codeBlock`
       [@bs.send]
-      external disconnect: (prismaClient) => Js.Promise.t(unit) = "disconnect";
+      external disconnect: (prismaClient) => Promise.t(unit) = "disconnect";
     `;
   };
 
@@ -52,9 +58,8 @@ class ExternalsGenerator {
       };
 
       [@bs.send] [@bs.scope "${model.name.toLowerCase()}"]
-      external create: (prismaClient, t) => Js.Promise.t(${
-        model.name
-      }.t) = "create";
+      external create: 
+        (prismaClient, t) => Promise.t(${model.name}.t) = "create";
     `;
   };
 
@@ -97,6 +102,7 @@ class ExternalsGenerator {
   generate = () => {
     return codeBlock`
         and Externals: {
+          ${this.make()}
           ${this.connect()}
           ${this.disconnect()}
           ${this.models
@@ -108,19 +114,7 @@ class ExternalsGenerator {
               `;
             })
             .join('\n\n')}
-        } = {
-          ${this.connect()}
-          ${this.disconnect()}
-          ${this.models
-            .map((model) => {
-              return codeBlock`
-                module ${model.name} = {
-                  ${this.create(model)}
-                }
-              `;
-            })
-            .join('\n\n')}
-        }
+        } = Externals
       `;
   };
 }

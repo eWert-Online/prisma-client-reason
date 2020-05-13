@@ -42,21 +42,24 @@ class ModelsGenerator {
           ${hasRelations ? '~include_: Include.t=?,' : ''}
           ~data: CreateInput.t,
           unit
-        ) => Js.Promise.t(t);
+        ) => Promise.t(t);
       `,
       re: codeBlock`
         let create = (
-          client,
+          prismaClient,
           ~select=?,
           ${hasRelations ? '~include_=?,' : ''}
           ~data,
           ()
         ) => {
-          Externals.${model.name}.create(client, {
-            select: select,
-            ${hasRelations ? 'include_: include_,' : ''}
-            data: data,
-          });
+          Externals.${model.name}.create(
+            prismaClient,
+            {
+              select: select,
+              ${hasRelations ? 'include_: include_,' : ''}
+              data: data,
+            }
+          );
         };
       `,
     };

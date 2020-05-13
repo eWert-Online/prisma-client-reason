@@ -35,9 +35,6 @@ generatorHandler({
       codeBlock`
         type prismaClient;
 
-        [@bs.module "@prisma/client"] [@bs.new]
-        external make: unit => prismaClient = "PrismaClient";
-
         /* ENUMS */
         ${makeEnums(options.dmmf.schema.enums)}
         
@@ -45,31 +42,9 @@ generatorHandler({
 
         ${externals.generate()}
 
-        let connect = (client, callback) => {
-          Externals.connect(client)
-          |> Js.Promise.then_(() => {
-              callback(None);
-              Js.Promise.resolve();
-            })
-          |> Js.Promise.catch(error => {
-              callback(Some(error));
-              Js.Promise.resolve();
-            })
-          |> ignore;
-        };
-
-        let disconnect = (client, callback) => {
-          Externals.disconnect(client)
-          |> Js.Promise.then_(() => {
-              callback(None);
-              Js.Promise.resolve();
-            })
-          |> Js.Promise.catch(error => {
-              callback(Some(error));
-              Js.Promise.resolve();
-            })
-          |> ignore;
-        };
+        let make = Externals.make;
+        let connect = Externals.connect;
+        let disconnect = Externals.disconnect;
       `,
     );
 

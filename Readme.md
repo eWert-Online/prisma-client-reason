@@ -12,6 +12,8 @@ If you want to help out, don't hesitate to file an issue or even a pull request.
   - [x] create new
   - [x] connect
   - [x] disconnect
+- [ ] Enums
+- [ ] Selecting subfields from action
 - [ ] Model actions
   - [ ] `Model.`findOne
   - [ ] `Model.`findMany
@@ -56,22 +58,14 @@ let prisma = PrismaClient.make();
 ### Connection Handling
 
 ```reason
-prisma->connect(() => {
-  Js.log("connected");
-});
+prisma->PrismaClient.connect;
 
-prisma->disconnect(() => {
-  Js.log("disconnected");
-});
+prisma->PrismaClient.disconnect;
 ```
 
 ### Writing to the Database
 
 #### PrismaClient.`Model`.create
-
-Currently this returns a Promise.
-We could wrap this, so it returns a callback.
-This would also remove the need for the last `unit`.
 
 ```reason
 prisma->PrismaClient.User.create(
