@@ -21,9 +21,9 @@ class InputsGenerator {
     return {
       rei: codeBlock`
         type t = {
-          select: option(Select.t),
-          ${this.hasRelations ? 'include_: option(Include.t),' : ''}
-          where: option(WhereUniqueInput.t),
+          select: option<Select.t>,
+          ${this.hasRelations ? 'include_: option<Include.t>,' : ''}
+          where: option<WhereUniqueInput.t>,
         };
 
         let make: (
@@ -35,9 +35,9 @@ class InputsGenerator {
       `,
       re: codeBlock`
         type t = {
-          select: option(Select.t),
-          ${this.hasRelations ? 'include_: option(Include.t),' : ''}
-          where: option(WhereUniqueInput.t),
+          select: option<Select.t>,
+          ${this.hasRelations ? 'include_: option<Include.t>,' : ''}
+          where: option<WhereUniqueInput.t>,
         };
 
         let make = (
@@ -56,25 +56,25 @@ class InputsGenerator {
 
   private FindManyArgs = () => {
     const model: DMMF.Model = this.model;
+    // orderBy: option<${model.name}.OrderByInput.t>,
+    // ~orderBy: ${model.name}.OrderByInput.t=?,
     return {
       rei: codeBlock`
         type t = {
-          select: option(Select.t),
-          ${this.hasRelations ? 'include_: option(Include.t),' : ''}
-          where: option(WhereInput.t),
-          orderBy: option(${model.name}OrderByInput.t),
-          skip: option(int),
-          after: option(WhereUniqueInput.t),
-          before: option(WhereUniqueInput.t),
-          first: option(int),
-          last: option(int)
+          select: option<Select.t>,
+          ${this.hasRelations ? 'include_: option<Include.t>,' : ''}
+          where: option<WhereInput.t>,
+          skip: option<int>,
+          after: option<WhereUniqueInput.t>,
+          before: option<WhereUniqueInput.t>,
+          first: option<int>,
+          last: option<int>
         };
 
         let make: (
           ~select: Select.t=?,
           ${this.hasRelations ? '~include_: Include.t=?,' : ''}
           ~where: WhereInput.t=?,
-          ~orderBy: ${model.name}OrderByInput.t=?,
           ~skip: int=?,
           ~after: WhereUniqueInput.t=?,
           ~before: WhereUniqueInput.t=?,
@@ -83,17 +83,17 @@ class InputsGenerator {
           unit
         ) => t;
       `,
+      // orderBy: option<${model.name}.OrderByInput.t>,
       re: codeBlock`
         type t = {
-          select: option(Select.t),
-          ${this.hasRelations ? 'include_: option(Include.t),' : ''}
-          where: option(WhereInput.t),
-          orderBy: option(${model.name}OrderByInput.t),
-          skip: option(int),
-          after: option(WhereUniqueInput.t),
-          before: option(WhereUniqueInput.t),
-          first: option(int),
-          last: option(int)
+          select: option<Select.t>,
+          ${this.hasRelations ? 'include_: option<Include.t>,' : ''}
+          where: option<WhereInput.t>,
+          skip: option<int>,
+          after: option<WhereUniqueInput.t>,
+          before: option<WhereUniqueInput.t>,
+          first: option<int>,
+          last: option<int>
         };
 
         let make = (
@@ -127,8 +127,8 @@ class InputsGenerator {
     return {
       rei: codeBlock`
         type t = {
-          select: option(Select.t),
-          ${this.hasRelations ? 'include_: option(Include.t),' : ''}
+          select: option<Select.t>,
+          ${this.hasRelations ? 'include_: option<Include.t>,' : ''}
           data: CreateInput.t
         };
 
@@ -141,8 +141,8 @@ class InputsGenerator {
       `,
       re: codeBlock`
         type t = {
-          select: option(Select.t),
-          ${this.hasRelations ? 'include_: option(Include.t),' : ''}
+          select: option<Select.t>,
+          ${this.hasRelations ? 'include_: option<Include.t>,' : ''}
           data: CreateInput.t
         };
 
@@ -165,8 +165,8 @@ class InputsGenerator {
     return {
       rei: codeBlock`
         type t = {
-          select: option(Select.t),
-          ${this.hasRelations ? 'include_: option(Include.t),' : ''}
+          select: option<Select.t>,
+          ${this.hasRelations ? 'include_: option<Include.t>,' : ''}
           data: UpdateInput.t,
           where: WhereUniqueInput.t,
         };
@@ -181,8 +181,8 @@ class InputsGenerator {
       `,
       re: codeBlock`
         type t = {
-          select: option(Select.t),
-          ${this.hasRelations ? 'include_: option(Include.t),' : ''}
+          select: option<Select.t>,
+          ${this.hasRelations ? 'include_: option<Include.t>,' : ''}
           data: UpdateInput.t,
           where: WhereUniqueInput.t,
         };
@@ -208,7 +208,7 @@ class InputsGenerator {
     return {
       rei: codeBlock`
         type t = {
-          where: option(WhereInput.t),
+          where: option<WhereInput.t>,
           data: ${model.name}.t
         };
 
@@ -220,7 +220,7 @@ class InputsGenerator {
       `,
       re: codeBlock`
         type t = {
-          where: option(WhereInput.t),
+          where: option<WhereInput.t>,
           data: ${model.name}.t
         };
 
@@ -241,8 +241,8 @@ class InputsGenerator {
     return {
       rei: codeBlock`
         type t = {
-          select: option(Select.t),
-          ${this.hasRelations ? 'include_: option(Include.t),' : ''}
+          select: option<Select.t>,
+          ${this.hasRelations ? 'include_: option<Include.t>,' : ''}
           where: WhereUniqueInput.t,
           create: CreateInput.t,
           update: UpdateInput.t,
@@ -259,8 +259,8 @@ class InputsGenerator {
       `,
       re: codeBlock`
         type t = {
-          select: option(Select.t),
-          ${this.hasRelations ? 'include_: option(Include.t),' : ''}
+          select: option<Select.t>,
+          ${this.hasRelations ? 'include_: option<Include.t>,' : ''}
           where: WhereUniqueInput.t,
           create: CreateInput.t,
           update: UpdateInput.t,
@@ -289,8 +289,8 @@ class InputsGenerator {
     return {
       rei: codeBlock`
         type t = {
-          select: option(Select.t),
-          ${this.hasRelations ? 'include_: option(Include.t),' : ''}
+          select: option<Select.t>,
+          ${this.hasRelations ? 'include_: option<Include.t>,' : ''}
           where: WhereUniqueInput.t,
         };
 
@@ -303,8 +303,8 @@ class InputsGenerator {
       `,
       re: codeBlock`
         type t = {
-          select: option(Select.t),
-          ${this.hasRelations ? 'include_: option(Include.t),' : ''}
+          select: option<Select.t>,
+          ${this.hasRelations ? 'include_: option<Include.t>,' : ''}
           where: WhereUniqueInput.t,
         };
 
@@ -327,7 +327,7 @@ class InputsGenerator {
     return {
       rei: codeBlock`
         type t = {
-          where: option(WhereInput.t),
+          where: option<WhereInput.t>,
         };
 
         let make: (
@@ -337,7 +337,7 @@ class InputsGenerator {
       `,
       re: codeBlock`
         type t = {
-          where: option(WhereInput.t),
+          where: option<WhereInput.t>,
         };
 
         let make = (
@@ -391,11 +391,7 @@ class InputsGenerator {
     const model: DMMF.Model = {
       ...this.model,
       fields: this.model.fields
-        .filter((field) => {
-          // FIXME: This is a bug in Prisma...
-          // @ts-ignore
-          return field.kind == 'object';
-        })
+        .filter((field) => field.kind == 'object')
         .flatMap((field) => [
           {
             ...field,

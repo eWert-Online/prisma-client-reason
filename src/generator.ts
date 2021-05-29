@@ -1,6 +1,7 @@
+#!/usr/bin/env node
+
 import { join } from 'path';
 import { ensureDir, writeFile } from 'fs-extra';
-import { codeBlock } from 'common-tags';
 import { generatorHandler } from '@prisma/generator-helper';
 
 import ExternalsGenerator from './Externals';
@@ -30,14 +31,17 @@ generatorHandler({
 
     const externals = new ExternalsGenerator(options.dmmf.datamodel.models);
 
-    await ensureDir(options.generator.output);
+    await ensureDir(options.generator.output.value);
     await writeFile(
-      join(options.generator.output, `${options.generator.config.name}.re`),
+      join(
+        options.generator.output.value,
+        `${options.generator.config.name}.res`,
+      ),
       `
         type prismaClient;
 
         /* ENUMS */
-        ${options.dmmf.schema.enums
+        ${options.dmmf.schema.enumTypes.prisma
           .map((type) => new EnumGenerator(type).generate())
           .join('\n\n')}
         

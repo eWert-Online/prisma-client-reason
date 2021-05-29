@@ -3,9 +3,9 @@ import { codeBlock } from 'common-tags';
 import { upperFirst, camelCase } from 'lodash';
 
 class EnumGenerator {
-  private enum: DMMF.Enum;
+  private enum: DMMF.SchemaEnum;
 
-  constructor(enum_: DMMF.Enum) {
+  constructor(enum_: DMMF.SchemaEnum) {
     this.enum = enum_;
   }
 

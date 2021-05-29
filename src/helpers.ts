@@ -30,11 +30,11 @@ export const toObjectType = (field: DMMF.Field) => {
   let type = toPrimitiveType(field.type);
 
   if (field.isList) {
-    type = `list(${type})`;
+    type = `list<${type}>`;
   }
 
   if (!field.isRequired) {
-    type = `option(${type})`;
+    type = `option<${type}>`;
   }
 
   return `${toObjectKey(field)}: ${type}`;
@@ -44,7 +44,7 @@ export const toNamedArgumentType = (field: DMMF.Field) => {
   let type = toPrimitiveType(field.type);
 
   if (field.isList) {
-    type = `list(${type})`;
+    type = `list<${type}>`;
   }
 
   if (!field.isRequired) {
@@ -62,7 +62,7 @@ export const toNamedArgument = (field: DMMF.Field) => {
   let type = toPrimitiveType(field.type);
 
   if (field.isList) {
-    type = `list(${type})`;
+    type = `list<${type}>`;
   }
 
   return `~${toObjectKey(field)}: ${type}`;
