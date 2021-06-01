@@ -40,7 +40,7 @@ class ModelsGenerator {
           ${hasRelations ? '~include_: Include.t=?,' : ''}
           ~data: CreateInput.t,
           unit
-        ) => Promise.t(t);
+        ) => Promise.t<t>;
       `,
       re: codeBlock`
         let create = (
@@ -65,6 +65,7 @@ class ModelsGenerator {
 
   private findMany = (model: DMMF.Model) => {
     const hasRelations = model.fields.some((field) => field.kind === 'object');
+    // ~orderBy: ${model.name}.OrderByInput.t=?,
     return {
       rei: codeBlock`
         let findMany: (
@@ -72,14 +73,13 @@ class ModelsGenerator {
           ~select: Select.t=?,
           ${hasRelations ? '~include_: Include.t=?,' : ''}
           ~where: WhereInput.t=?,
-          ~orderBy: ${model.name}OrderByInput.t=?,
           ~skip: int=?,
           ~after: WhereUniqueInput.t=?,
           ~before: WhereUniqueInput.t=?,
           ~first: int=?,
           ~last: int=?,
           unit
-        ) => Promise.t(array(t));
+        ) => Promise.t<array<t>>;
       `,
       re: codeBlock`
         let findMany = (
